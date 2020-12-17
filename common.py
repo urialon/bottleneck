@@ -1,6 +1,7 @@
 from enum import Enum, auto
 
 from tasks.dictionary_lookup import DictionaryLookupDataset
+from gnns.luong_gat import LuongGATConv
 
 from torch import nn
 from torch_geometric.nn import GCNConv, GatedGraphConv, GINConv, GATConv
@@ -36,6 +37,7 @@ class GNN_TYPE(Enum):
     GGNN = auto()
     GIN = auto()
     GAT = auto()
+    LUONG_GAT = auto()
 
     @staticmethod
     def from_string(s):
@@ -55,10 +57,15 @@ class GNN_TYPE(Enum):
             return GINConv(nn.Sequential(nn.Linear(in_dim, out_dim), nn.BatchNorm1d(out_dim), nn.ReLU(),
                                          nn.Linear(out_dim, out_dim), nn.BatchNorm1d(out_dim), nn.ReLU()))
         elif self is GNN_TYPE.GAT:
-            # 4-heads, although the paper by Velickovic et al. had used 6-8 heads. 
+            # 4-heads, although the paper by Velickovic et al. had used 6-8 heads.
             # The output will be the concatenation of the heads, yielding a vector of size out_dim
             num_heads = 4
             return GATConv(in_dim, out_dim // num_heads, heads=num_heads)
+        elif self is GNN_TYPE.LUONG_GAT:
+            # 4-heads, although the paper by Velickovic et al. had used 6-8 heads.
+            # The output will be the concatenation of the heads, yielding a vector of size out_dim
+            num_heads = 4
+            return LuongGATConv(in_dim, out_dim // num_heads, heads=num_heads)
 
 
 class STOP(Enum):
