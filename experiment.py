@@ -86,6 +86,7 @@ class Experiment():
                 loss = loss / self.accum_grad
                 loss.backward()
                 if (i + 1) % self.accum_grad == 0:
+                    torch.nn.utils.clip_grad_norm_(self.model.parameters(), 1.0)
                     optimizer.step()
                     optimizer.zero_grad()
 

@@ -18,6 +18,10 @@ class GraphModel(torch.nn.Module):
         self.num_layers = num_layers
         self.layer0_keys = nn.Embedding(num_embeddings=dim0 + 1, embedding_dim=h_dim)
         self.layer0_values = nn.Embedding(num_embeddings=dim0 + 1, embedding_dim=h_dim)
+
+        self.layer0_ff = nn.Sequential(
+            nn.Linear(in_features=h_dim, out_features=h_dim, bias=False),)
+
         self.layers = nn.ModuleList()
         self.layer_norms = nn.ModuleList()
         if unroll:
