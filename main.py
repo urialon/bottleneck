@@ -33,7 +33,7 @@ if __name__ == '__main__':
 
 
 def get_fake_args(
-        task=Task.PARITY,
+        task=Task.DICTIONARY,
         type=GNN_TYPE.GCN,
         dim=32,
         depth=3,
