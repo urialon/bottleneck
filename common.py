@@ -3,19 +3,14 @@ from enum import Enum, auto
 from tasks.dictionary_lookup import DictionaryLookupDataset
 from gnns.luong_gat import LuongGATConv
 from gnns.dp_gat import DotProductGATConv
+from gnns.gat2 import GAT2Conv
 
 from torch import nn
 from torch_geometric.nn import GCNConv, GatedGraphConv, GINConv, GATConv
 
 
 class Task(Enum):
-    PARITY = auto()
-    LEAF_PARITY = auto()
-    NOISY_LEAF_PARITY = auto()
-    NOISY_SUM = auto()
     DICTIONARY = auto()
-    NOISY_DICTIONARY = auto()
-    DUMMY = auto()
 
     @staticmethod
     def from_string(s):
@@ -38,6 +33,7 @@ class GNN_TYPE(Enum):
     GGNN = auto()
     GIN = auto()
     GAT = auto()
+    GAT2 = auto()
     LUONG_GAT = auto()
     DP_GAT = auto()
 
@@ -63,6 +59,11 @@ class GNN_TYPE(Enum):
             # The output will be the concatenation of the heads, yielding a vector of size out_dim
             num_heads = 4
             return GATConv(in_dim, out_dim // num_heads, heads=num_heads)
+        elif self is GNN_TYPE.GAT2:
+            # 4-heads, although the paper by Velickovic et al. had used 6-8 heads.
+            # The output will be the concatenation of the heads, yielding a vector of size out_dim
+            num_heads = 4
+            return GAT2Conv(in_dim, out_dim // num_heads, heads=num_heads)
         elif self is GNN_TYPE.LUONG_GAT:
             # 4-heads, although the paper by Velickovic et al. had used 6-8 heads.
             # The output will be the concatenation of the heads, yielding a vector of size out_dim
